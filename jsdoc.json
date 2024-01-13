@@ -1,0 +1,19 @@
+{
+  "plugins": [
+    "node_modules/jsdoc-vuejs"
+  ],
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true
+  },
+  "source": {
+    "include": ["src"],
+    "includePattern": ".+\\.(vue|js|ts)$",
+    "excludePattern": "(node_modules/|docs)"
+  },
+  "sourceType": "module",
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true
+  }
+}
