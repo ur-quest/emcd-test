@@ -40,7 +40,8 @@ export default {
         :size="150"
         :src="picture.large"
         :alt="fullName"
-        fit="fill"
+        shape="square"
+        fit="cover"
       />
 
       <div>
@@ -58,3 +59,11 @@ export default {
       </div>
     </el-card>
 </template>
+
+<style lang="scss">
+.el-card {
+  &:hover {
+    border: 1px solid grey;
+  }
+}
+</style>

@@ -21,6 +21,8 @@ function throttle(func, ms) {
 
 		func.apply(this, arguments)
 
+		isThrottled = true
+
 		setTimeout(() => {
 			isThrottled = false
 			if (savedArgs) {

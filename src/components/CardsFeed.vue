@@ -1,7 +1,6 @@
 <script>
 import getUsers from '../api/getUsers'
 import { defineAsyncComponent } from 'vue'
-import throttle from '@/utils/throttle'
 
 /** 
 * @vue-data {Number} usersCount - Number of items in server response
@@ -13,13 +12,15 @@ import throttle from '@/utils/throttle'
 * @vue-event handleScroll - Function for watching scroll position and getting more users
 */
 
-
 export default {
 	name: 'CardsFeed',
 
 	components: {
 		Card: defineAsyncComponent(() =>
-			import('Components/Card.vue'))
+			import('Components/Card.vue')),
+		Observer: defineAsyncComponent(() =>
+			import('Components/Observer.vue')
+		)
 	},
 
 	data() {
@@ -44,46 +45,36 @@ export default {
 			}
 		},
 
-		handleScroll() {
-			const documentHeight = document.body.offsetHeight
-			const screenHeight = window.innerHeight
-			const scrolled = window.scrollY
-			const threshold = documentHeight - screenHeight / 5
-
-			const position = scrolled + screenHeight
-
-			if (position >= threshold) {
-				this.usersCount += 30
-				this.loadData(this.usersCount)
-			}
+		onIntersect() {
+			this.loadData(this.usersCount)
+			this.usersCount += 30
 		}
 	},
-
-	mounted() {
-		window.addEventListener('scroll', throttle(this.handleScroll, 300))
-		window.addEventListener('resize', throttle(this.handleScroll, 300))
-		this.loadData(this.usersCount)
-	},
-
-	beforeUnmount() {
-		window.removeEventListener('scroll', throttle(this.handleScroll, 300))
-		window.removeEventListener('resize', throttle(this.handleScroll, 300))
-	}
 }
 </script>
 
 <template>
     <div
-		v-loading="isLoading"
 		class="cards-feed"
-		ref="scrollComponent"
+		ref="rootElement"
 	>
         <Card
             v-for="card of usersList"
             :key="card.id.value"
             v-bind="card"
         />
+
+		<Observer
+			@on-intersect="onIntersect"
+		/>
     </div>
+
+	<el-progress 
+		v-if="isLoading" 
+		:indeterminate="true" 
+		:percentage="100"
+		striped 
+	/>
 </template>
 
 <style lang="scss">
@@ -91,6 +82,6 @@ export default {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 1rem;
-	min-height: 100vh
+	min-height: 97vh
 }
 </style>
