@@ -36,13 +36,11 @@ export default {
       shadow="always"
       body-class="card"
     >
-      <el-avatar
-        :size="150"
-        :src="picture.large"
-        :alt="fullName"
-        shape="square"
-        fit="cover"
-      />
+      <img  
+        :src="picture.large" 
+        :alt="fullName" 
+        loading="lazy"
+      >
 
       <div>
         <el-text

@@ -3,6 +3,8 @@
 /**
 * @vue-prop {{ root: string, rootMargin: string, threshold: string }} options - Intersection observer options
 * @vue-data {IntersectionObserver} observer - Intersection observer instance
+* @vue-event init - Function for observer initialisation
+*
 */
 
 export default {
@@ -19,15 +21,21 @@ export default {
         observer: null,
     }),
 
-    mounted() {
-        const options = this.options || {}
-        this.observer = new IntersectionObserver(([entry]) => {
-            if (entry && entry.isIntersecting) {
-                this.$emit('on-intersect')
-            }
-        }, options)
+    methods: {
+        init() {
+            const options = this.options || {}
+            this.observer = new IntersectionObserver(([entry]) => {
+                if (entry && entry.isIntersecting) {
+                    this.$emit('on-intersect')
+                }
+            }, options)
 
-        this.observer.observe(this.$el)
+            this.observer.observe(this.$el)
+        }
+    },
+
+    mounted() {
+        this.init()
     },
 
     beforeUnmount() {
@@ -39,9 +47,3 @@ export default {
 <template>
     <div class="observer"/>
 </template>
-
-<style lang="scss">
-// .observer {
-//     height: 20px;
-// }
-</style>
